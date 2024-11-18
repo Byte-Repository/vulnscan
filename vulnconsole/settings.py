@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # other
     'crispy_forms',
-    # app
+    # apps
     'vulnscan.apps.VulnscanConfig',
 ]
 

@@ -17,6 +17,6 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path('', include('nmap_application.urls')),
+    path('', include('vulnscan.urls')),
     path('admin/', admin.site.urls),
 ]

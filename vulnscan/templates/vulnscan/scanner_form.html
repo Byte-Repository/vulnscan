@@ -6,17 +6,17 @@
 
 <p>
     {% load crispy_forms_tags %}
-    <form method="post" action="{% url 'network_scanner:post_form_scanner' %}" id="scanner_form">
+    <form method="post" action="{% url 'vulnscan:post_form_scanner' %}" id="scanner_form">
         {% csrf_token %}
         {{ scanner_form|crispy }}
         <input type="submit" value="Submit" class="btn btn-dark" id="scanner_button">
     </form>
 </p>
 <p>
-    <a href="{% url 'network_scanner:scanner_type' 'QS' %}">See quick scan history</a>
+    <a href="{% url 'vulnscan:scanner_type' 'QS' %}">See quick scan history</a>
 </p>
 <p>
-    <a href="{% url 'network_scanner:scanner_type' 'FS' %}">See full scan history</a>
+    <a href="{% url 'vulnscan:scanner_type' 'FS' %}">See full scan history</a>
 </p>
 <!--https://stackoverflow.com/questions/1960240/jquery-ajax-submit-form-->
 <!--https://django-crispy-forms.readthedocs.io/en/latest/crispy_tag_forms.html#ajax-validation-recipe-->
@@ -27,7 +27,7 @@
         var scanner_form = '#scanner_form';
 
         $.ajax({
-            url: "{% url 'network_scanner:post_form_scanner' %}",
+            url: "{% url 'vulnscan:post_form_scanner' %}",
             type: "POST",
             data: $(scanner_form).serialize(),
             datatype: 'json',

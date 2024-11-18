@@ -18,7 +18,8 @@ from django.urls import path
 from . import views
 
 # In the urls if the action succeded returns to all automatically
-app_name='network_scanner'
+app_name='vulnscan'
+
 urlpatterns = [
     path('network-scanner/', views.ScannerView.as_view(), name='form_scanner_view'),
     path('perform-scan/', views.ScannerView.as_view(), name='post_form_scanner'),

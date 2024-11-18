@@ -18,7 +18,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse, resolve
 from django.views import View
 
-from .scanners import NmapScanner, ScapyScanner
+from .scanner import NmapScanner, ScapyScanner
 
 from django.db.models import F
 
@@ -28,7 +28,7 @@ import json
 class ScannerView(View, NmapScanner, ScapyScanner):
 
     model = ScannerHistory
-    template_name = "nmap_application/scanner_form.html"
+    template_name = "vulnscan/scanner_form.html"
 
     def get(self, request) :
 
@@ -60,7 +60,7 @@ class ScannerView(View, NmapScanner, ScapyScanner):
 class ScannerHistoryListView(ListView):
 
     model = ScannerHistory
-    template_name = "nmap_application/scanner_history_list.html"
+    template_name = "vulnscan/scanner_history_list.html"
 
     def get(self, request, type) :
 
@@ -74,7 +74,7 @@ class ScannerHistoryListView(ListView):
 class HostListView(ListView):
 
     model = Host
-    template_name = "nmap_application/scanner_history_host_list.html"
+    template_name = "vulnscan/scanner_history_host_list.html"
 
     def get(self, request, scanner_history_id):
 
@@ -91,7 +91,7 @@ class HostListView(ListView):
 class OperativeSystemMatchListView(ListView):
 
     model = OperativeSystemMatch
-    template_name = "nmap_application/scanner_history_host_os_matches_list.html"
+    template_name = "vulnscan/scanner_history_host_os_matches_list.html"
 
     def get(self, request, scanner_history_id, host_id):
 
@@ -144,7 +144,7 @@ class OperativeSystemMatchListView(ListView):
 class PortListView(ListView):
 
     model = Port
-    template_name = "nmap_application/scanner_history_host_ports.html"
+    template_name = "vulnscan/scanner_history_host_ports.html"
 
     def get(self, request, scanner_history_id, host_id):
 
