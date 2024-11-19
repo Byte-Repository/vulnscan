@@ -1,9 +1,12 @@
-{% extends "base_bootstrap.html" %}
+{% extends "base.html" %}
 
 {% block content %}
+<!-- Back Button -->
 <p>
-  <a href="{% url 'network_scanner:form_scanner_view' %}" class="btn btn-dark">Back</a>
+  <a href="{% url 'vulnscan:form_scanner_view' %}" class="btn btn-dark">Back</a>
 </p>
+
+<!-- Scanner History Table -->
 <table class="table">
   <thead>
     <tr>
@@ -14,16 +17,16 @@
     </tr>
   </thead>
   <tbody>
-  {% for scanner in scanner_history %}
-    <tr>
-      <th scope="row">{{ scanner.id }}</th>
-      <td>{{ scanner.target }}</td>
-      <td>{{ scanner.created_on }}</td>
-      <td>
-        <a href="{% url 'network_scanner:host_list' scanner.id %}" class="btn btn-dark">View hosts</a>
-      </td>
-    </tr>
-  {% endfor %}
+    {% for scanner in scanner_history %}
+      <tr>
+        <th scope="row">{{ scanner.id }}</th>
+        <td>{{ scanner.target }}</td>
+        <td>{{ scanner.created_on }}</td>
+        <td>
+          <a href="{% url 'vulnscan:host_list' scanner.id %}" class="btn btn-dark">View hosts</a>
+        </td>
+      </tr>
+    {% endfor %}
   </tbody>
 </table>
 

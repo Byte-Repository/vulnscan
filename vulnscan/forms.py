@@ -1,42 +1,54 @@
 from django import forms
 from .models import ScannerHistory
-
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Fieldset,ButtonHolder
+from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Fieldset, ButtonHolder
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
 
-# strip means to remove whitespace from the beginning and the end before storing the column
+# Constants for scan types
+QUICK = 'QS'
+FULL = 'FS'
+
 class ScannerForm(forms.Form):
+    """
+    A form for handling scanner history input.
 
-    # Hint: this will need to be changed for use in the ads application :)
-    class Meta:
-        model = ScannerHistory
-        fields = [
-            'target',
-            'type'
-        ]
-
+    Fields:
+        target (str): The target URL or IP address for scanning.
+        type (Choice): The type of scan (Quick or Full).
+    """
     target = forms.CharField(
         required=True,
         max_length=20,
         min_length=7,
-        strip=True
+        strip=True  # Strips leading/trailing whitespace
     )
 
-    # Choices for field type
-    QUICK = 'QS'
-    FULL = 'FS'
     type = forms.ChoiceField(
-        choices = (
+        choices=(
             (QUICK, "Quick scan"),
             (FULL, "Full scan")
         ),
-        widget = forms.RadioSelect,
-        initial = 'QS',
+        widget=forms.RadioSelect,
+        initial=QUICK
     )
 
-# https://docs.djangoproject.com/en/3.0/topics/http/file-uploads/
-# https://stackoverflow.com/questions/2472422/django-file-upload-size-limit
-# https://stackoverflow.com/questions/32007311/how-to-change-data-in-django-modelform
-# https://docs.djangoproject.com/en/3.0/ref/forms/validation/#cleaning-and-validating-fields-that-depend-on-each-other
-# https://gist.github.com/maraujop/1838193
+    class Meta:
+        model = ScannerHistory
+        fields = ['target', 'type']
+
+    def __init__(self, *args, **kwargs):
+        """
+        Initialize the form and configure the crispy forms helper for styling.
+        """
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                'Scan Information',
+                'target', 
+                'type'
+            ),
+            FormActions(
+                Submit('submit', 'Start Scan', css_class='btn btn-primary')
+            )
+        )

@@ -1,0 +1,123 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} VulnByte {% endblock %}</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+    <!-- Font Awesome for the moon icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Google Font: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS (if you have any custom styles) -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Custom Font (Poppins) and Global Styling -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Apply smooth transition on hover */
+        .card {
+            transition: transform 0.6s ease-in-out, box-shadow 0.6s ease-in-out; /* Longer duration and ease-in-out timing */
+        }
+
+        .card:hover {
+            transform: scale(1.05); /* Makes the card 5% bigger on hover */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Add a larger shadow to highlight the card */
+        }
+
+        /* Dark Mode Styling for Cards */
+        .bg-dark .card {
+            background-color: #343a40 !important;
+            color: #f8f9fa !important;
+        }
+        
+        /* Dark Mode Styling for Card Headers */
+        .bg-dark .card-title {
+            color: #f8f9fa !important;
+        }
+
+        /* Hover effect for the icons */
+        .text-center i {
+            transition: transform 0.3s ease; /* Smooth transition for scaling */
+        }
+
+        .text-center i:hover {
+            transform: scale(0.9); /* Scale down the icon when hovered */
+        }
+        
+    </style>
+
+    {% block head %}
+    {% endblock %}
+</head>
+
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-center w-100">
+                <a class="navbar-brand" href="#" style="font-size: 3rem; font-weight: 700; margin-left: 60px;">VulnByte</a>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Add links here if needed -->
+            </div>
+            <button id="theme-toggle" class="btn btn-outline-light">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mt-4 flex-grow-1">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4 mt-auto">
+        <div class="container-fluid">
+            <p>&copy; 2024 VulnByte. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- JavaScript to Toggle Dark/Light Mode -->
+    <script>
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        themeToggleBtn.addEventListener('click', () => {
+            body.classList.toggle('bg-dark');
+            body.classList.toggle('text-white');
+            body.classList.toggle('bg-light');
+
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.classList.toggle('bg-dark');
+            });
+        });
+    </script>
+
+    {% block footer %}
+    {% endblock %}
+</body>
+</html>

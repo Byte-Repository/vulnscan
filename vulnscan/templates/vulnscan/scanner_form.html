@@ -1,59 +1,136 @@
-{% extends "base_bootstrap.html" %}
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-<br />
-<div id="spinner"></div>
+<!-- Add some spacing at the top -->
+<div class="container mt-5">
 
-<p>
-    {% load crispy_forms_tags %}
-    <form method="post" action="{% url 'vulnscan:post_form_scanner' %}" id="scanner_form">
-        {% csrf_token %}
-        {{ scanner_form|crispy }}
-        <input type="submit" value="Submit" class="btn btn-dark" id="scanner_button">
-    </form>
-</p>
-<p>
-    <a href="{% url 'vulnscan:scanner_type' 'QS' %}">See quick scan history</a>
-</p>
-<p>
-    <a href="{% url 'vulnscan:scanner_type' 'FS' %}">See full scan history</a>
-</p>
-<!--https://stackoverflow.com/questions/1960240/jquery-ajax-submit-form-->
-<!--https://django-crispy-forms.readthedocs.io/en/latest/crispy_tag_forms.html#ajax-validation-recipe-->
+    <!-- Instructions in a Card -->
+    <div class="card p-4 shadow-sm mb-4">
+        <h4 class="card-title text-center mb-3">How to Use the Tool</h4>
+        <p class="text-center">This tool allows you to scan a network for vulnerabilities. Please follow the steps below:</p>
+        <ul class="list-unstyled text-center">
+            <li>Enter the required details in the form below, including the network IP range or hostname you want to scan.</li>
+            <li>Click the "Submit" button to initiate the scan. This will send the scanning request to the server.</li>
+            <li>Wait for the scan to complete. You will see a notification at the top right while the scan is in progress.</li>
+            <li>Once completed, you can view the scan results by navigating to the "Scan History" section below.</li>
+        </ul>
+    </div>
+
+    <!-- Form and History Cards side by side -->
+    <div class="row">
+        <!-- Scan Network Card -->
+        <div class="col-md-6 mb-4 d-flex">
+            <div class="card p-4 shadow-sm flex-fill" style="height: 100%">
+                <h4 class="card-title text-center mb-3">Scan Network</h4>
+                <form id="scanner_form" method="POST" action="{% url 'vulnscan:post_form_scanner' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="target" name="target" placeholder="Enter IP address or hostname" required>
+                    </div>
+                    
+                    <div class="mt-4"></div> <!-- This adds a spacer of margin-top: 1.5rem -->
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="scan_switch" name="scan_type" value="FS">
+                            <label class="form-check-label" id="switch_label" for="scan_switch">Quick Scan</label>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-3">
+                        <button type="submit" class="btn btn-dark btn-lg rounded-pill shadow-sm">
+                            Scan Now
+                        </button>
+                    </div>                                       
+                </form>
+            </div>
+        </div>
+
+        <script>
+            const scanSwitch = document.getElementById('scan_switch');
+            const switchLabel = document.getElementById('switch_label');
+
+            // Toggle label text when the switch is clicked
+            scanSwitch.addEventListener('change', () => {
+                if (scanSwitch.checked) {
+                    switchLabel.textContent = 'Full Scan';
+                } else {
+                    switchLabel.textContent = 'Quick Scan';
+                }
+            });
+        </script>
+
+
+        <!-- Scan History Card -->
+        <div class="col-md-6 mb-4 d-flex">
+            <div class="card p-4 shadow-sm flex-fill" style="height: 100%">
+                <h4 class="card-title text-center mb-3">Scan History</h4>
+                <div class="d-flex justify-content-center">
+                    <div class="text-center mx-3">
+                        <div class="mt-4"></div> <!-- This adds a spacer of margin-top: 1.5rem -->
+                        
+                        <!-- Quick Scan History Link as an Icon -->
+                        <a href="{% url 'vulnscan:scanner_type' 'QS' %}" class="text-dark text-decoration-none">
+                            <i class="fas fa-search fa-3x"></i><br>
+                            <h6 class="card-title text-center mb-3">Quick Scan</h6>
+                        </a>
+                    </div>
+                    <div class="text-center mx-3">
+                        <div class="mt-4"></div> <!-- This adds a spacer of margin-top: 1.5rem -->
+
+                        <!-- Full Scan History Link as an Icon -->
+                        <a href="{% url 'vulnscan:scanner_type' 'FS' %}" class="text-dark text-decoration-none">
+                            <i class="fas fa-search-plus fa-3x"></i><br>
+                            <h6 class="card-title text-center mb-3">Full Scan</h6>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<div id="scanNotification" class="alert alert-info" style="display:none; position: fixed; top: 10px; right: 10px; z-index: 1000;"></div>
+
+<!-- AJAX form submission script -->
 <script type="text/javascript">
-    $( document ).ready(function() {
-      $('#scanner_button').click(function (event) {
-        event.preventDefault();
-        var scanner_form = '#scanner_form';
-
-        $.ajax({
-            url: "{% url 'vulnscan:post_form_scanner' %}",
-            type: "POST",
-            data: $(scanner_form).serialize(),
-            datatype: 'json',
-            header: {'X-CSRFToken': '{% csrf_token %}'},
-            beforeSend: function () {
-                // Set spinner from https://getbootstrap.com/docs/4.4/components/spinners/
-                $('#spinner').html('<div class="d-flex align-items-center"><strong>Scanning, please wait, this will take a while...</strong><div class="spinner-border ml-auto" role="status" aria-hidden="true" style="width: 3rem; height: 3rem;"></div></div>')
-            },
-            success: function(data) {
-                if (!(data['success'])) {
-                    // Here we replace the form, for the
-                    alert("An error has occurred");
+    $(document).ready(function() {
+        $('#scanner_form').on('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting traditionally
+    
+            var scanner_form = '#scanner_form';
+    
+            // Show notification at the top right (before submitting)
+            $('#scanNotification').show();
+    
+            $.ajax({
+                url: $(scanner_form).attr('action'), // Use the form's action URL
+                type: "POST",
+                data: $(scanner_form).serialize(),
+                datatype: 'json',
+                headers: {'X-CSRFToken': '{% csrf_token %}'},
+                
+                success: function(data) {
+                    if (data.success) {
+                        // Show success message or update UI dynamically
+                        $('#scanNotification').html("<strong>Scan completed successfully!</strong>").removeClass("alert-info").addClass("alert-success");
+                    } else {
+                        // Show error message if something goes wrong
+                        $('#scanNotification').html("<strong>Error occurred during the scan.</strong>").removeClass("alert-info").addClass("alert-danger");
+                    }
+                },
+    
+                complete: function () {
+                    // Hide the notification after 3 seconds
+                    setTimeout(function() {
+                        $('#scanNotification').fadeOut();
+                    }, 3000);
+                },
+    
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log(xhr.responseText); // Log error if it occurs
                 }
-                else {
-                    // Here you can show the user a success message or do whatever you need
-                    alert("The network has been scanned successfully");
-                }
-            },
-            complete: function () {
-                $('#spinner').empty(); //Remove child elements
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                console.log(xhr.responseText);
-            }
+            });
         });
-      });
-     });
-  </script>
+    });
+</script>
+
 {% endblock %}

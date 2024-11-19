@@ -1,47 +1,50 @@
-{% extends "base_bootstrap.html" %}
+{% extends "base.html" %}
 
 {% block content %}
+<!-- Back Button -->
+<p>
+  <a href="{% url 'vulnscan:scanner_type' scanner_history.type %}" class="btn btn-dark">Back</a>
+</p>
 
-<p>
-  <a href="{% url 'network_scanner:scanner_type' scanner_history.type %}" class="btn btn-dark">Back</a>
-</p>
-<h5>
-  <strong>Scanner</strong>
-</h5>
-<p>
-  <strong>Target: </strong> {{ scanner_history.target }}
-</p>
-<p>
-  <strong>Created on: </strong> {{ scanner_history.created_on }}
-</p>
+<!-- Scanner Details -->
+<h5><strong>Scanner</strong></h5>
+<p><strong>Target: </strong> {{ scanner_history.target }}</p>
+<p><strong>Created on: </strong> {{ scanner_history.created_on }}</p>
+
+<!-- Hosts Table -->
 <table class="table">
   <thead>
     <tr>
       <th scope="col">#</th>
       <th scope="col">IP</th>
       <th scope="col">Mac address</th>
-      {% if scanner_history.type  == 'FS' %}
-      <th scope="col">View OS matches</th>
-      <th scope="col">View ports</th>
+
+      <!-- Additional Columns for Full Scan (FS) -->
+      {% if scanner_history.type == 'FS' %}
+        <th scope="col">View OS matches</th>
+        <th scope="col">View ports</th>
       {% endif %}
     </tr>
   </thead>
+  
   <tbody>
-  {% for host in hosts %}
-    <tr>
-      <th scope="row">{{ host.id }}</th>
-      <td>{{ host.IP }}</td>
-      <td>{{ host.mac_address }}</td>
-      {% if scanner_history.type  == 'FS' %}
-      <td>
-        <a href="{% url 'network_scanner:os_matches_list' scanner_history.id host.id %}" class="btn btn-dark">View os matches</a>
-      </td>
-      <td>
-        <a href="{% url 'network_scanner:host_ports_list' scanner_history.id host.id %}" class="btn btn-dark">View ports</a>
-      </td>
-      {% endif %}
-    </tr>
-  {% endfor %}
+    {% for host in hosts %}
+      <tr>
+        <th scope="row">{{ host.id }}</th>
+        <td>{{ host.IP }}</td>
+        <td>{{ host.mac_address }}</td>
+
+        <!-- View Links for Full Scan (FS) -->
+        {% if scanner_history.type == 'FS' %}
+          <td>
+            <a href="{% url 'vulnscan:os_matches_list' scanner_history.id host.id %}" class="btn btn-dark">View OS matches</a>
+          </td>
+          <td>
+            <a href="{% url 'vulnscan:host_ports_list' scanner_history.id host.id %}" class="btn btn-dark">View ports</a>
+          </td>
+        {% endif %}
+      </tr>
+    {% endfor %}
   </tbody>
 </table>
 

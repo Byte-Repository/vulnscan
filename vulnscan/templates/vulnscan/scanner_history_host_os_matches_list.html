@@ -1,19 +1,17 @@
-{% extends "base_bootstrap.html" %}
+{% extends "base.html" %}
 
 {% block content %}
+<!-- Back Button -->
+<p>
+  <a href="{% url 'vulnscan:host_list' scanner_history_id %}" class="btn btn-dark">Back</a>
+</p>
 
-<p>
-  <a href="{% url 'network_scanner:host_list' scanner_history_id %}" class="btn btn-dark">Back</a>
-</p>
-<h5>
-  <strong>Host</strong>
-</h5>
-<p>
-  <strong>IP: </strong> {{ host.IP }}
-</p>
-<p>
-  <strong>Mac address: </strong> {{ host.mac_address }}
-</p>
+<!-- Host Details -->
+<h5><strong>Host</strong></h5>
+<p><strong>IP: </strong> {{ host.IP }}</p>
+<p><strong>Mac address: </strong> {{ host.mac_address }}</p>
+
+<!-- Operating System Matches Table -->
 <table class="table">
   <thead>
     <tr>
@@ -29,21 +27,22 @@
       <th scope="col">OS accuracy</th>
     </tr>
   </thead>
+  
   <tbody>
-  {% for operative_system_match in operative_system_matches %}
-    <tr>
-      <th scope="row">{{ operative_system_match.os_id }}</th>
-      <td>{{ operative_system_match.os_name }}</td>
-      <td>{{ operative_system_match.os_accuracy }}</td>
-      <td>{{ operative_system_match.os_line }}</td>
-      <td>{{ operative_system_match.os_created_on }}</td>
-      <td>{{ operative_system_match.os_match_class_type }}</td>
-      <td>{{ operative_system_match.os_match_class_vendor }}</td>
-      <td>{{ operative_system_match.os_match_class_operative_system_family }}</td>
-      <td>{{ operative_system_match.os_match_class_operative_system_generation }}</td>
-      <td>{{ operative_system_match.os_match_class_accuracy }}</td>
-    </tr>
-  {% endfor %}
+    {% for operative_system_match in operative_system_matches %}
+      <tr>
+        <th scope="row">{{ operative_system_match.os_id }}</th>
+        <td>{{ operative_system_match.os_name }}</td>
+        <td>{{ operative_system_match.os_accuracy }}</td>
+        <td>{{ operative_system_match.os_line }}</td>
+        <td>{{ operative_system_match.os_created_on }}</td>
+        <td>{{ operative_system_match.os_match_class_type }}</td>
+        <td>{{ operative_system_match.os_match_class_vendor }}</td>
+        <td>{{ operative_system_match.os_match_class_operative_system_family }}</td>
+        <td>{{ operative_system_match.os_match_class_operative_system_generation }}</td>
+        <td>{{ operative_system_match.os_match_class_accuracy }}</td>
+      </tr>
+    {% endfor %}
   </tbody>
 </table>
 
