@@ -3,29 +3,54 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>VulnByte  {% block title %}
-    {% endblock %}   </title>
-    <!-- Bootstrap core CSS -->
-<link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet">
-<link href="{% static 'css/main.css'%}" rel="stylesheet">
+    <title>VulnByte {% block title %}{% endblock %}</title>
 
-    <!-- Custom styles for this template -->
-    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+    <!-- Font Awesome for the moon icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Google Font: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS (if you have any custom styles) -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Custom Font (Poppins) and Global Styling -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* move card down some */
+        .card {
+            top: 155px;
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Add a larger shadow to highlight the card */
+        }
+    </style>
+
   </head>
+  
   <body>
-
     <main role="main">
-
-
-
       {% block content %}
-
       {% endblock %}
-
-
     </main>
-  </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEJ6b-4fE6M8X6zM7H3g6y5T0y8h9g2gmYp1FzZs8Kj1gO50/tb5R+w6/mvcw" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
+
+    <!-- JavaScript libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" 
+            integrity="sha384-KyZXEJ6b-4fE6M8X6zM7H3g6y5T0y8h9g2gmYp1FzZs8Kj1gO50/tb5R+w6/mvcw" 
+            crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
+            integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" 
+            crossorigin="anonymous"></script>
+  </body>
 </html>

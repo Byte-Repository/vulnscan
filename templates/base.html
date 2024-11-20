@@ -31,6 +31,8 @@
         /* Apply smooth transition on hover */
         .card {
             transition: transform 0.6s ease-in-out, box-shadow 0.6s ease-in-out; /* Longer duration and ease-in-out timing */
+            will-change: transform; /* Inform the browser that the card will change transform */
+            text-rendering: geometricPrecision; /* Better text rendering on scale */
         }
 
         .card:hover {
@@ -57,6 +59,13 @@
         .text-center i:hover {
             transform: scale(0.9); /* Scale down the icon when hovered */
         }
+
+        /* Move the Sign out button higher */
+        .navbar .nav-item form {
+            margin-top: -25px; /* Adjust this value as needed */
+            position: relative;
+            left: -1550px; /* Move it left */
+        }
         
     </style>
 
@@ -70,7 +79,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <div class="d-flex justify-content-center w-100">
-                <a class="navbar-brand" href="#" style="font-size: 3rem; font-weight: 700; margin-left: 60px;">VulnByte</a>
+                <a class="navbar-brand" href="#" style="font-size: 3rem; font-weight: 700; margin-left: 150px;">VulnByte</a>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -78,6 +87,19 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <!-- Add links here if needed -->
             </div>
+
+            <!-- Sign out form inside the navbar -->
+            <li class="nav-item text-nowrap mt-0 ml-2">
+                <form action="{% url 'logout' %}" method="POST">
+                    {% csrf_token %}
+                    <input
+                        class="text text-capitalize btn btn-outline-light"
+                        type="submit"
+                        value="Sign out"
+                    />
+                </form>
+            </li>
+            
             <button id="theme-toggle" class="btn btn-outline-light">
                 <i class="fas fa-moon"></i>
             </button>
