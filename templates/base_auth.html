@@ -22,17 +22,30 @@
 
     <!-- Custom Font (Poppins) and Global Styling -->
     <style>
-        body {
+        body 
+        {
             font-family: 'Poppins', sans-serif;
+            background-color: #f1f5f9;
         }
 
         /* move card down some */
         .card {
             top: 155px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
-        .card:hover {
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Add a larger shadow to highlight the card */
+        /* Increase padding and height of the email and password fields */
+        input[type="text"], 
+        input[type="password"] 
+        {
+            padding-block: 10px;    
+            padding-inline: 12px;  
+            width: 350px;
+            height: 40px;          
+            font-size: 1.1rem;    
+            border-radius: 5px;
+            margin: 0 auto;
+            display: block;  
         }
     </style>
 
