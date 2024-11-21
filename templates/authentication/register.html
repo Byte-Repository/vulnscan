@@ -2,11 +2,24 @@
 {% load static %}
 
 {% block content %}
-<div class="row justify-content-center mt-5">
-  <div class="col-md-4">
+<div class="row justify-content-center" style="margin-top: -50px;">
+  <div class="col-md-3">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title text-center py-3">Register for a Free Account</h4>
+
+        <!-- VulnByte Title -->
+        <h1 
+          class="card-title text-center py-4" 
+          style="color: #6a5acd; font-size: 2rem; font-weight: bold;margin-bottom: -5px;">
+          VulnByte
+        </h1>
+
+        <!-- Register Title -->
+        <h4 
+        class="card-title text-center py-1 text-muted" 
+        style="font-size: 1rem; margin-bottom: 35px;">
+        Register for a Free Account
+        </h4>
 
         <form action="{% url 'register' %}" method="post">
           {% csrf_token %}
@@ -51,7 +64,7 @@
             />
             <small 
               class="showPasswordToggle text-muted position-absolute" 
-              style="right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+              style="left: 320px; top: 50%; transform: translateY(-50%); cursor: pointer;">
               SHOW
             </small>
           </div>
