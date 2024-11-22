@@ -10,60 +10,52 @@
         <h4 class="card-title text-center mb-3">How to Use the Tool</h4>
         <p class="text-center">This tool allows you to scan a network for vulnerabilities. Please follow the steps below:</p>
         <ul class="list-unstyled text-center">
-            <li>Enter the required details in the form below, including the network IP range or hostname you want to scan.</li>
+            <li>Enter the required details in the form below, including the network IP range you want to scan.</li>
             <li>Click the "Submit" button to initiate the scan. This will send the scanning request to the server.</li>
             <li>Wait for the scan to complete. You will see a notification at the top right while the scan is in progress.</li>
             <li>Once completed, you can view the scan results by navigating to the "Scan History" section below.</li>
         </ul>
     </div>
 
-    <!-- Form and History Cards side by side -->
-    <div class="row">
-        <!-- Scan Network Card -->
-        <div class="col-md-6 mb-4 d-flex">
-            <div class="card p-4 shadow-sm flex-fill" style="height: 100%">
-                <h4 class="card-title text-center mb-3">Scan Network</h4>
-                <form id="scanner_form" method="POST" action="{% url 'vulnscan:post_form_scanner' %}">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <input type="text" class="form-control" id="target" name="target" placeholder="Enter IP address or hostname" required>
-                    </div>
+   <!-- Form and History Cards side by side -->
+   <div class="row">
+    <!-- Scan Network Card -->
+    <div class="col-md-6 order-md-first">
+        <div class="card p-4 shadow-sm" style="height: 100%">
+            <h4 class="card-title text-center mb-3">Scan Network</h4>
+            <form id="scanner_form" method="POST" action="{% url 'vulnscan:post_form_scanner' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="target" name="target" placeholder="Enter IP address" required>
+                </div>
 
-                    <div class="mt-4"></div> <!-- This adds a spacer of margin-top: 1.5rem -->
-                    <div class="mb-3">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="scan_switch" name="scan_type" value="FS">
-                            <label class="form-check-label" id="switch_label" for="scan_switch">Quick Scan</label>
-                        </div>
-                    </div>
+                <div class="mt-4"></div> <!-- Spacer -->
 
-                    <div class="d-flex justify-content-center mt-3">
-                        <button type="submit" class="btn btn-dark btn-lg rounded-pill shadow-sm">
-                            Scan Now
-                        </button>
-                    </div>                                       
-                </form>
-            </div>
+                <!-- Radio buttons for selecting scan type -->
+                <div class="mb-3">
+                    <label class="form-label">Select Scan Type:</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="scan_type" id="quick_scan" value="QS" checked>
+                        <label class="form-check-label" for="quick_scan">Quick Scan</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="scan_type" id="full_scan" value="FS">
+                        <label class="form-check-label" for="full_scan">Full Scan</label>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center mt-3">
+                    <button type="submit" class="btn btn-dark btn-lg rounded-pill shadow-sm">
+                        Scan Now
+                    </button>
+                </div>
+            </form>
         </div>
-
-        <script>
-            const scanSwitch = document.getElementById('scan_switch');
-            const switchLabel = document.getElementById('switch_label');
-
-            // Toggle label text when the switch is clicked
-            scanSwitch.addEventListener('change', () => {
-                if (scanSwitch.checked) {
-                    switchLabel.textContent = 'Full Scan';
-                } else {
-                    switchLabel.textContent = 'Quick Scan';
-                }
-            });
-        </script>
-
+    </div>
 
         <!-- Scan History Card -->
-        <div class="col-md-6 mb-4 d-flex">
-            <div class="card p-4 shadow-sm flex-fill" style="height: 100%">
+        <div class="col-md-6 order-md-last">
+            <div class="card p-4 shadow-sm" style="height: 100%">
                 <div class="mt-3"></div> <!-- This adds a spacer of margin-top: 1.5rem -->
                 <h4 class="card-title text-center mb-3">Scan History</h4>
                 <div class="d-flex justify-content-center">
@@ -90,6 +82,9 @@
                 </div>
             </div>
         </div>
+    </div>
+
+</div>
 
 <div id="scanNotification" class="alert alert-info" style="display:none; position: fixed; top: 10px; right: 10px; z-index: 1000;"></div>
 
@@ -113,7 +108,7 @@
                 
                 success: function(data) {
                     if (data.success) {
-                        // Show success message or update UI dynamically
+                        // Show success message or update UI
                         $('#scanNotification').html("<strong>Scan completed successfully!</strong>").removeClass("alert-info").addClass("alert-success");
                     } else {
                         // Show error message if something goes wrong

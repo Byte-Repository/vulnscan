@@ -43,7 +43,6 @@ class ScannerView(View, NmapScanner, ScapyScanner):
             response['success'] = True
 
         return JsonResponse(response)
-        # return redirect(reverse('vulnscan:form_scanner_view'))
 
 class ScannerHistoryListView(ListView):
     model = ScannerHistory

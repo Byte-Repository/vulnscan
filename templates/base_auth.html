@@ -48,6 +48,68 @@
             margin: 0 auto;
             display: block;  
         }
+
+        /* login/register button */
+        .submit-btn {
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          width: 90.7%; 
+          background: linear-gradient(45deg, #6a5acd, #4b0082); /* Blue-purple gradient */
+          border: none; /* Removes default border */
+          color: white; /* Text color */
+          padding: 10px 20px; /* button size */
+          font-size: 16px; /* font size */
+          border-radius: 5px; /* Rounded corners */
+          cursor: pointer; /* Cursor pointer on hover */
+          transition: background 0.3s ease; /* Smooth transition on hover */
+        }
+
+        .submit-btn:hover {
+          background: linear-gradient(45deg, #4b0082, #6a5acd); /* Reverse gradient on hover */
+        }
+
+        /* Shorten the width and height of alert messages */
+        .messages .alert {
+          max-width: 350px; 
+          width: 100%; 
+          height: 40px; 
+          padding: 10px 15px; 
+          font-size: 14px; 
+          text-align: center; 
+          border-radius: 5px; 
+          margin: 5px auto; 
+          word-wrap: break-word; 
+          color: white; 
+          display: flex; 
+          justify-content: center; 
+          align-items: center; 
+        }
+
+        /* Gradient color variations based on message type */
+        .messages .alert-success {
+          
+
+        .messages .alert-warning {
+          background: linear-gradient(45deg, #ff9800, #f57c00); /* Orange gradient for warning */
+        }
+
+        .messages .alert-danger {
+          background: linear-gradient(45deg, #f44336, #d32f2f); /* Red gradient for danger */
+        }background: linear-gradient(45deg, #4caf50, #388e3c); /* Green gradient for success */
+        }
+
+        .messages .alert-info {
+          background: linear-gradient(45deg, #2196f3, #1976d2); /* Blue gradient for info */
+        }
+
+        .messages .alert-warning {
+          background: linear-gradient(45deg, #ff9800, #f57c00); /* Orange gradient for warning */
+        }
+
+        .messages .alert-danger {
+          background: linear-gradient(45deg, #f44336, #d32f2f); /* Red gradient for danger */
+        }
     </style>
 
   </head>

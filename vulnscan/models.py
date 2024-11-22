@@ -31,8 +31,8 @@ class OperativeSystemMatch(models.Model):
     Represents an operating system match for a host, including its accuracy and line information.
     """
     name = models.CharField(max_length=255)
-    accuracy = models.PositiveSmallIntegerField()
-    line = models.PositiveSmallIntegerField()
+    accuracy = models.PositiveIntegerField()
+    line = models.PositiveIntegerField()
 
     host = models.ForeignKey(
         Host,
