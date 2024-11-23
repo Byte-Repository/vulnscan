@@ -3,16 +3,21 @@
 {% block content %}
 <!-- Back Button -->
 <p>
-  <a href="{% url 'vulnscan:scanner_type' scanner_history.type %}" class="btn btn-dark">Back</a>
+  <a href="{% url 'vulnscan:scanner_type' scanner_history.type %}" class="bi bi-arrow-left">Back</a>
 </p>
 
 <!-- Scanner Details -->
-<h5><strong>Scanner</strong></h5>
-<p><strong>Target: </strong> {{ scanner_history.target }}</p>
+<!-- <h5><strong>Scanner</strong></h5>
+<p><strong>Target: </strong> {{ scanner_history.target }}</p> -->
 <p><strong>Created on: </strong> {{ scanner_history.created_on }}</p>
 
-<!-- Hosts Table -->
-<table class="table">
+<!-- Scanner History Header with Gradient -->
+<div class="card-header">
+  <h4 class="mb-0">Scanner History</h4>
+</div>
+
+<!-- Hosts Table with new class for styling -->
+<table class="table table-striped table-hover host-table">
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -37,10 +42,10 @@
         <!-- View Links for Full Scan (FS) -->
         {% if scanner_history.type == 'FS' %}
           <td>
-            <a href="{% url 'vulnscan:os_matches_list' scanner_history.id host.id %}" class="btn btn-dark">View OS matches</a>
+            <a href="{% url 'vulnscan:os_matches_list' scanner_history.id host.id %}" class="btn" style="background-image: linear-gradient(45deg, #6a5acd, #4b0082); color: white;">View OS matches</a>
           </td>
           <td>
-            <a href="{% url 'vulnscan:host_ports_list' scanner_history.id host.id %}" class="btn btn-dark">View ports</a>
+            <a href="{% url 'vulnscan:host_ports_list' scanner_history.id host.id %}" class="btn" style="background-image: linear-gradient(45deg, #6a5acd, #4b0082); color: white;">View ports</a>
           </td>
         {% endif %}
       </tr>

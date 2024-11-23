@@ -1,33 +1,51 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- Back Button -->
-<p>
-  <a href="{% url 'vulnscan:form_scanner_view' %}" class="btn btn-dark">Back</a>
-</p>
+<div class="container py-4">
+  <!-- Back Button -->
+  <div class="mb-4">
+    <a href="{% url 'vulnscan:form_scanner_view' %}" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Back
+    </a>
+  </div>
 
-<!-- Scanner History Table -->
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Target</th>
-      <th scope="col">Created on</th>
-      <th scope="col"></th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for scanner in scanner_history %}
-      <tr>
-        <th scope="row">{{ scanner.id }}</th>
-        <td>{{ scanner.target }}</td>
-        <td>{{ scanner.created_on }}</td>
-        <td>
-          <a href="{% url 'vulnscan:host_list' scanner.id %}" class="btn btn-dark">View hosts</a>
-        </td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
+  <!-- Scanner History Table -->
+  <div class="card shadow-sm history-list">
+    <div class="card-header bg-dark text-white">
+      <h4 class="mb-0">Scanner History</h4>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Target</th>
+            <th scope="col">Created On</th>
+            <th scope="col" class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for scanner in scanner_history %}
+            <tr>
+              <th scope="row">{{ scanner.id }}</th>
+              <td>{{ scanner.target }}</td>
+              <td>{{ scanner.created_on|date:"M d, Y h:i A" }}</td>
+              <td class="text-center">
+                <a href="{% url 'vulnscan:host_list' scanner.id %}" class="btn btn-sm" style="background-image: linear-gradient(45deg, #6a5acd, #4b0082); color: white;">
+                    View Hosts
+                </a>
+            </td>            
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="4" class="text-center text-muted py-3">
+                No scanner history available.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 {% endblock %}
