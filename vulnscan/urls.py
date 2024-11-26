@@ -46,4 +46,6 @@ urlpatterns = [
     # View for listing ports of a specific host within a scanner history
     path('scanner-history/<int:scanner_history_id>/host/<int:host_id>/ports/', 
          views.PortListView.as_view(), name='host_ports_list'),
+
+    path('scan-history/<int:history_id>/download-pdf/', views.generate_pdf, name='generate_pdf'),
 ]

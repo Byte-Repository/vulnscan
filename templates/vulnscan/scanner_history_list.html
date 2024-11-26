@@ -34,6 +34,10 @@
                 <a href="{% url 'vulnscan:host_list' scanner.id %}" class="btn btn-sm" style="background-image: linear-gradient(45deg, #6a5acd, #4b0082); color: white;">
                     View Hosts
                 </a>
+                 <!-- download button/link -->
+                <a href="{% url 'vulnscan:generate_pdf' scanner.id %}" class="btn btn-sm" style="background-image: linear-gradient(45deg, #6a5acd, #4b0082); color: white;">Download PDF</a>
+
+
             </td>            
             </tr>
           {% empty %}

@@ -143,3 +143,50 @@ class PortListView(ListView):
         }
         return render(request, self.template_name, context)
 
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from weasyprint import HTML
+from .models import ScannerHistory
+
+def generate_pdf(request, history_id):
+    try:
+        scanner_history = ScannerHistory.objects.get(id=history_id)
+    except ScannerHistory.DoesNotExist:
+        return HttpResponse("Scanner History not found.", status=404)
+
+    # Prepare hosts data for the PDF
+    hosts_data = []
+    for host in scanner_history.hosts.all():
+        # For quick scans, we only need the IP and MAC address
+        if scanner_history.type == ScannerHistory.QUICK:
+            hosts_data.append({
+                'host': host,
+                'os_matches': None,  # No OS matches for quick scan
+                'ports': None,  # No ports for quick scan
+            })
+        # For full scans, fetch OS matches and ports
+        elif scanner_history.type == ScannerHistory.FULL:
+            os_matches = host.host_os_match.all()
+            ports = host.host_port.all()
+            hosts_data.append({
+                'host': host,
+                'os_matches': os_matches,
+                'ports': ports,
+            })
+
+    # Render the template for the PDF content with the updated scanner history
+    html_content = render_to_string('vulnscan/scan_report.html', {
+        'scanner_history': scanner_history,
+        'hosts_data': hosts_data,
+    })
+
+    # Generate the PDF
+    pdf = HTML(string=html_content).write_pdf()
+
+    # Return the PDF as an HTTP response
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="scan_report_{history_id}.pdf"'
+    return response
+
+
