@@ -3,6 +3,7 @@ from scapy.all import arping
 import logging
 from .models import Host, OperativeSystemMatch, OperativeSystemClass, Port, PortService, ScannerHistory
 import ipaddress
+from ipaddress import ip_network
 
 logger = logging.getLogger(__name__)
 
@@ -27,47 +28,54 @@ import xml.etree.ElementTree as ET  # Import XML parser for structured parsing
 
 logger = logging.getLogger(__name__)
 
+from ipaddress import ip_network
+
 class NmapScanner(object):
     def perform_full_scan_and_save(self, target, args="-sS -A -O"):
-        if not is_valid_ip(target):
-            raise ValueError("Invalid target IP provided.")
+        # Validate the target (IP or CIDR range)
+        if not self.is_valid_target(target):
+            raise ValueError("Invalid target provided. Please provide a valid IP address or CIDR range.")
 
-        # Construct the Nmap command with sudo and proper scan options
-        nmap_command = f"sudo /usr/bin/nmap -oX - {target} {args}"
+        # Step 1: ARP Scan for Network Discovery
+        logger.info(f"Performing ARP discovery on target: {target}")
+        discovered_hosts = self.perform_arp_discovery(target)
         
+        # Save discovered hosts
+        for ip, mac in discovered_hosts.items():
+            try:
+                host, created = Host.objects.get_or_create(IP=ip, mac_address=mac)
+                logger.info(f"Host discovered: {ip} ({'New' if created else 'Existing'})")
+            except Exception as e:
+                log_error(e, f"Failed to create or fetch Host for IP: {ip}")
+                continue
+
+        # Step 2: Full Nmap Scan
+        nmap_command = f"sudo /usr/bin/nmap -oX - {target} {args}"
         try:
-            # Run the Nmap scan with sudo
             logger.info(f"Running Nmap scan with command: {nmap_command}")
             result = subprocess.run(nmap_command, shell=True, capture_output=True, text=True)
             
-            # Check if the Nmap command was successful
             if result.returncode != 0:
                 logger.error(f"Nmap scan failed: {result.stderr}")
                 return None
 
-            # Parse the result (XML format)
             scanner_result = self.parse_nmap_xml(result.stdout)
-            logger.info(f"Scanner result for {target}: {scanner_result}")  # Log the full result for debugging
-            
+            logger.info(f"Scanner result for {target}: {scanner_result}")
         except Exception as e:
             log_error(e, f"Error performing Nmap scan for target: {target}")
             return None
 
-        # Log the raw result to see the full structure returned by Nmap
-        logger.debug(f"Full raw scan result: {scanner_result}")
-
+        # Save Nmap scan results into the database
         scanner_history = ScannerHistory(target=target, type='FS')
         scanner_history.save()
 
         for IP in scanner_result:
-            # Validate if the IP is a valid IP address
+            # Validate the IP
             if not is_valid_ip(IP):
                 logger.warning(f"Invalid IP found in scan result: {IP}. Skipping.")
-                continue  # Skip invalid IP addresses
+                continue
 
             host_data = {'IP': IP}
-
-            # Check if "macaddress" exists and is not None
             if "macaddress" in scanner_result[IP] and scanner_result[IP]["macaddress"]:
                 mac_address = scanner_result[IP]["macaddress"].get("addr")
                 if mac_address:
@@ -79,7 +87,7 @@ class NmapScanner(object):
                 host, created = Host.objects.get_or_create(**host_data)
             except Exception as e:
                 log_error(e, f"Failed to create or fetch Host for IP: {IP}")
-                continue  # Skip to the next IP if creating the host fails
+                continue
 
             scanner_history.hosts.add(host)
 
@@ -101,6 +109,37 @@ class NmapScanner(object):
                         self._create_port_service(ports.get("service", {}), port)
 
         return scanner_history
+    
+    def is_valid_target(self, target):
+        try:
+            # Accepts single IPs or CIDR ranges
+            ip_network(target, strict=False)
+            return True
+        except ValueError:
+            return False
+
+
+    
+    def perform_arp_discovery(self, target_network):
+        """
+        Performs ARP discovery to find devices on the network.
+        """
+        discovered_hosts = {}
+
+        try:
+            logger.info(f"Starting ARP discovery on network: {target_network}")
+            answered, unanswered = arping(target_network)
+            
+            for _, answer in answered:
+                ip = answer.psrc
+                mac = answer.hwsrc
+                discovered_hosts[ip] = mac
+                logger.info(f"Discovered device: {ip} ({mac})")
+        except Exception as e:
+            log_error(e, f"Error performing ARP discovery on network: {target_network}")
+        
+        return discovered_hosts
+
 
     def parse_nmap_xml(self, xml_data):
         """

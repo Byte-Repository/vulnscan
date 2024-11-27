@@ -188,5 +188,3 @@ def generate_pdf(request, history_id):
     response = HttpResponse(pdf, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="scan_report_{history_id}.pdf"'
     return response
-
-

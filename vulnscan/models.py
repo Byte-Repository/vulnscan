@@ -68,7 +68,7 @@ class OperativeSystemClass(models.Model):
     vendor = models.CharField(max_length=255)
     operative_system_family = models.CharField(max_length=255)
     operative_system_generation = models.CharField(max_length=255)
-    accuracy = models.PositiveSmallIntegerField()
+    accuracy = models.PositiveIntegerField()
 
     created_on = models.DateTimeField(
         auto_now_add=True,
@@ -85,10 +85,10 @@ class Port(models.Model):
     Represents a network port with its details, associated with a host.
     """
     protocol = models.CharField(max_length=255)
-    portid = models.PositiveSmallIntegerField()
+    portid = models.PositiveIntegerField()
     state = models.CharField(max_length=255)
     reason = models.CharField(max_length=255)
-    reason_ttl = models.PositiveSmallIntegerField()
+    reason_ttl = models.PositiveIntegerField()
 
     host = models.ForeignKey(
         Host,
@@ -126,7 +126,7 @@ class PortService(models.Model):
     hostname = models.CharField(max_length=255, null=True)
     operative_system_type = models.CharField(max_length=255, null=True)
     method = models.CharField(max_length=255, null=True)
-    conf = models.PositiveSmallIntegerField()
+    conf = models.PositiveIntegerField()
 
     created_on = models.DateTimeField(
         auto_now_add=True,
