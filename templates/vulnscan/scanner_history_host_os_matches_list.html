@@ -1,49 +1,65 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- Back Button -->
-<p>
-  <a href="{% url 'vulnscan:host_list' scanner_history_id %}" class="btn btn-dark">Back</a>
-</p>
+<div class="container py-4">
+  <!-- Back Button -->
+  <div class="mb-4">
+    <a href="{% url 'vulnscan:host_list' scanner_history_id %}" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Back
+    </a>
+  </div>
 
 <!-- Host Details -->
-<h5><strong>Host</strong></h5>
+<!-- <h5><strong>Host</strong></h5> -->
 <p><strong>IP: </strong> {{ host.IP }}</p>
 <p><strong>Mac address: </strong> {{ host.mac_address }}</p>
 
 <!-- Operating System Matches Table -->
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Name</th>
-      <th scope="col">Accuracy</th>
-      <th scope="col">Line</th>
-      <th scope="col">Created on</th>
-      <th scope="col">Type</th>
-      <th scope="col">Vendor</th>
-      <th scope="col">OS family</th>
-      <th scope="col">OS generation</th>
-      <th scope="col">OS accuracy</th>
-    </tr>
-  </thead>
-  
-  <tbody>
-    {% for operative_system_match in operative_system_matches %}
-      <tr>
-        <th scope="row">{{ operative_system_match.os_id }}</th>
-        <td>{{ operative_system_match.os_name }}</td>
-        <td>{{ operative_system_match.os_accuracy }}</td>
-        <td>{{ operative_system_match.os_line }}</td>
-        <td>{{ operative_system_match.os_created_on }}</td>
-        <td>{{ operative_system_match.os_match_class_type }}</td>
-        <td>{{ operative_system_match.os_match_class_vendor }}</td>
-        <td>{{ operative_system_match.os_match_class_operative_system_family }}</td>
-        <td>{{ operative_system_match.os_match_class_operative_system_generation }}</td>
-        <td>{{ operative_system_match.os_match_class_accuracy }}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="card shadow-sm history-list">
+  <div class="card-header bg-dark text-white">
+    <h4 class="mb-0">Operating System Matches</h4>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped table-hover mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Accuracy</th>
+          <th scope="col">Line</th>
+          <th scope="col">Created on</th>
+          <th scope="col">Type</th>
+          <th scope="col">Vendor</th>
+          <th scope="col">OS family</th>
+          <th scope="col">OS generation</th>
+          <th scope="col">OS accuracy</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for operative_system_match in operative_system_matches %}
+          <tr>
+            <th scope="row">{{ operative_system_match.os_id }}</th>
+            <td>{{ operative_system_match.os_name }}</td>
+            <td>{{ operative_system_match.os_accuracy }}</td>
+            <td>{{ operative_system_match.os_line }}</td>
+            <td>{{ operative_system_match.os_created_on }}</td>
+            <td>{{ operative_system_match.os_match_class_type }}</td>
+            <td>{{ operative_system_match.os_match_class_vendor }}</td>
+            <td>{{ operative_system_match.os_match_class_operative_system_family }}</td>
+            <td>{{ operative_system_match.os_match_class_operative_system_generation }}</td>
+            <td>{{ operative_system_match.os_match_class_accuracy }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="10" class="text-center text-muted py-3">
+              No operating system matches available.
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
 
 {% endblock %}

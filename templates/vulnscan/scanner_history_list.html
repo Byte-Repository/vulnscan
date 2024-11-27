@@ -31,14 +31,20 @@
               <td>{{ scanner.target }}</td>
               <td>{{ scanner.created_on|date:"M d, Y h:i A" }}</td>
               <td class="text-center">
-                <a href="{% url 'vulnscan:host_list' scanner.id %}" class="btn btn-sm" style="background-image: linear-gradient(45deg, #6a5acd, #4b0082); color: white;">
-                    View Hosts
+                <!-- View Hosts Button -->
+                <a href="{% url 'vulnscan:host_list' scanner.id %}" 
+                   class="btn btn-sm me-2" 
+                   style="background-image: linear-gradient(45deg, #6a5acd, #4b0082); color: white;">
+                   View Hosts
                 </a>
-                 <!-- download button/link -->
-                <a href="{% url 'vulnscan:generate_pdf' scanner.id %}" class="btn btn-sm" style="background-image: linear-gradient(45deg, #6a5acd, #4b0082); color: white;">Download PDF</a>
-
-
-            </td>            
+                
+                <!-- Download PDF Button -->
+                <a href="{% url 'vulnscan:generate_pdf' scanner.id %}" 
+                   class="btn btn-sm" 
+                   style="background-image: linear-gradient(45deg, #6a5acd, #4b0082); color: white;">
+                   Download PDF
+                </a>
+              </td>            
             </tr>
           {% empty %}
             <tr>
@@ -47,7 +53,7 @@
               </td>
             </tr>
           {% endfor %}
-        </tbody>
+        </tbody>        
       </table>
     </div>
   </div>

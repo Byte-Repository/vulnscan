@@ -1,23 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- Back Button -->
-<p>
-  <a href="{% url 'vulnscan:scanner_type' scanner_history.type %}" class="bi bi-arrow-left">Back</a>
-</p>
+<div class="container py-4">
+  <!-- Back Button -->
+  <div class="mb-4">
+    <a href="{% url 'vulnscan:scanner_type' scanner_history.type %}" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Back
+    </a>
+  </div>
 
-<!-- Scanner Details -->
 <!-- <h5><strong>Scanner</strong></h5>
 <p><strong>Target: </strong> {{ scanner_history.target }}</p> -->
 <p><strong>Created on: </strong> {{ scanner_history.created_on }}</p>
 
-<!-- Scanner History Header with Gradient -->
-<div class="card-header">
-  <h4 class="mb-0">Scanner History</h4>
-</div>
+<!-- Scanner History Table -->
+<div class="card shadow-sm history-list">
+  <div class="card-header bg-dark text-white">
+    <h4 class="mb-0">Scanner History</h4>
+  </div>
 
 <!-- Hosts Table with new class for styling -->
-<table class="table table-striped table-hover host-table">
+<table class="table table-striped table-hover history-list
+">
   <thead>
     <tr>
       <th scope="col">#</th>

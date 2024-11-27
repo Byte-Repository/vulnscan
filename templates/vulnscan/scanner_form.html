@@ -26,7 +26,7 @@
             <form id="scanner_form" method="POST" action="{% url 'vulnscan:post_form_scanner' %}">
                 {% csrf_token %}
                 <div class="mb-3">
-                    <input type="text" class="form-control" id="target" name="target" placeholder="Enter IP address" required>
+                    <input type="text" class="form-control" id="target" name="target" placeholder="Enter IP address/Range" required>
                 </div>
 
                 <div class="mt-4"></div> <!-- Spacer -->
