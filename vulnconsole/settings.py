@@ -13,6 +13,8 @@ import sys
 from pathlib import Path
 from django.contrib import messages
 
+import dj_database_url
+
 import os
 from dotenv import load_dotenv
 
@@ -26,12 +28,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-cvb)#jt)^00sj)q8-m9=3llp9qh4=++==g0s=v+s@s!bhl3!vc'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False").lower() =="true"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
 
 # Application definition
 
@@ -79,6 +81,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'vulnconsole.wsgi.application'
 
 # Database
@@ -94,6 +97,8 @@ DATABASES = {
     }
 }
 
+DATABASE_URL = os.environ.get("DATABASE_URL")
+DATABASES["default"] = dj_database_url.parse("DATABASE_URL")
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -127,7 +132,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / "static",]
+# STATICFILES_DIRS = [BASE_DIR / "static",]
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
