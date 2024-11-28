@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
     
+    path('', RedirectView.as_view(url='/authentication/register/', permanent=False)),
     path('authentication/', include('authentication.urls')),
     path('vulnscan', include('vulnscan.urls')),
     path('admin/', admin.site.urls),
